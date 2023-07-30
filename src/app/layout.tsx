@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import Header from "@/components/Header";
-import FilterContextProvider from "@/context/FilterContext";
-import ProductContextProvider from "@/context/ProductContext";
+import DefaultProvider from "@/components/DefaultProvider";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -22,12 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        <FilterContextProvider>
-          <ProductContextProvider>
-            <Header />
-            {children}
-          </ProductContextProvider>
-        </FilterContextProvider>
+        <DefaultProvider>
+          <Header />
+          {children}
+        </DefaultProvider>
       </body>
     </html>
   );
