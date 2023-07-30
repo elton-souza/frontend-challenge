@@ -23,8 +23,7 @@ export default function ProductContextProvider({
   children: ReactNode;
 }) {
   const [products, setProducts] = useState<ProductItem[]>([]);
-
-  const { filterType } = useFilter();
+  const { filterType, search } = useFilter();
 
   const categories = useMemo(
     () => Array.from(new Set(products.map(({ category }) => category))),
@@ -32,9 +31,26 @@ export default function ProductContextProvider({
   );
 
   const filteredProducts = useMemo(() => {
-    if (!filterType) return products;
-    return products.filter(({ category }) => category === filterType);
-  }, [products, filterType]);
+    const filteredProductsByType = products.filter(
+      ({ category }) => category === filterType
+    );
+
+    const filteredBySearch = products.filter(({ title }) =>
+      title.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    );
+
+    const allFilters = products.filter(
+      ({ category, title }) =>
+        category === filterType &&
+        title.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    );
+
+    if (!filterType && !search) return products;
+    if (filterType && !search) return filteredProductsByType;
+    if (!filterType && search) return filteredBySearch;
+
+    return allFilters;
+  }, [products, filterType, search]);
 
   useEffect(() => {
     (async () => {
