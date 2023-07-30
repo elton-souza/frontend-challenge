@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 interface ImageProps {
   src: string;
   className?: string;
 }
 
-export default function ImageWrapper({ src, className }: ImageProps) {
+function ImageWrapper({ src, className }: ImageProps) {
   const containerImage = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -20,3 +20,5 @@ export default function ImageWrapper({ src, className }: ImageProps) {
 
   return <div ref={containerImage} dangerouslySetInnerHTML={{ __html: src }} />;
 }
+
+export default memo(ImageWrapper);
