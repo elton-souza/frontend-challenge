@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useDeferredValue, useState } from "react";
 
 export const FilterContext = createContext({
   filterType: "",
@@ -17,6 +17,8 @@ export default function FilterContextProvider({
   const [filterType, setFilterType] = useState("");
   const [search, setSearch] = useState("");
 
+  const dSearch = useDeferredValue(search);
+
   const handleChangeFilterType = (nextFilter: string) => {
     setFilterType((oldState) => (nextFilter === oldState ? "" : nextFilter));
   };
@@ -25,7 +27,7 @@ export default function FilterContextProvider({
     <FilterContext.Provider
       value={{
         filterType,
-        search,
+        search: dSearch,
         setFilterType: handleChangeFilterType,
         setSearch,
       }}
